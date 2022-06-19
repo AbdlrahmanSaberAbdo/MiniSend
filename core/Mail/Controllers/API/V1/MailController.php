@@ -5,9 +5,11 @@ namespace Core\Mail\Controllers\API\V1;
 use Core\Mail\Requests\MailRequest as FormRequest;
 use Core\Mail\Models\Mail as Model;
 use Core\Mail\Resources\MailResource as Resource;
+use Core\Mail\Trait\AttachmentTrait;
 
 class MailController extends \Core\Base\Controllers\API\Controller
 {
+    use AttachmentTrait;
     /**
      * Init.
      * @param FormRequest $request
@@ -26,6 +28,12 @@ class MailController extends \Core\Base\Controllers\API\Controller
 
     public function store()
     {
+        $this->sendResponse(
+            new $this->resource($this->model->create($this->request->all())),
+            'successfully created.',
+            true,
+            201
+        );
 
     }
 
