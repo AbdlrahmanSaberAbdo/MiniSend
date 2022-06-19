@@ -27,7 +27,7 @@ class MailFactory extends Factory
             'text' => '',
             'html' => '',
             'status' => '',
-
+            'subject' => ''
         ];
     }
 }

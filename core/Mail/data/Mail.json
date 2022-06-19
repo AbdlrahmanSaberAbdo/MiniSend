@@ -3,6 +3,9 @@
         "sender": {
             "type": "string"
         },
+        "subject": {
+            "type": "string"
+        },
         "recipient": {
             "type": "text"
         },

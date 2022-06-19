@@ -35,7 +35,7 @@ class MailRequest extends FormRequest
                     'text' => 'nullable',
                     'html' => 'nullable',
                     'status' => 'required',
-
+                    'subject' => 'required'
                 ];
             }
             case 'PUT': {
@@ -45,6 +45,7 @@ class MailRequest extends FormRequest
                     'text' => 'nullable',
                     'html' => 'nullable',
                     'status' => 'required',
+                    'subject' => 'required'
 
                 ];
             }
