@@ -35,6 +35,11 @@ class MailController extends \Core\Base\Controllers\API\Controller
             201
         );
 
+        if($this->request->has('attachments')) {
+            $email_attachments = $this->getAttachmentsPaths($this->request->get('attachments'));
+
+            $this->model->attachments()->saveMany($email_attachments);
+        }
     }
 
     public function download()
