@@ -1,0 +1,13 @@
+{
+  "attributes": {
+      "filepath": {
+          "type": "string"
+      },
+      "attachmentable": {
+          "type": "morphs"
+      }
+  },
+  "relations": {
+
+  }
+}
