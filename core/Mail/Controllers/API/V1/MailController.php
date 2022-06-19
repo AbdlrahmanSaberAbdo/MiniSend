@@ -23,7 +23,9 @@ class MailController extends \Core\Base\Controllers\API\Controller
 
     public function index()
     {
+        $query = $this->model::filter($this->request);
 
+        return  $this->sendResponse($this->resource::collection($query->get()));
     }
 
     public function store()
