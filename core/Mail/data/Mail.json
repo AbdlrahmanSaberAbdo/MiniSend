@@ -1,0 +1,25 @@
+{
+    "attributes": {
+        "sender": {
+            "type": "string"
+        },
+        "recipient": {
+            "type": "text"
+        },
+        "text": {
+            "type": "longText",
+            "definition": "nullable"
+        },
+        "html": {
+            "type": "longText",
+            "definition": "nullable"
+        },
+        "status": {
+            "type": "longText",
+            "definition": "default:posted"
+        }
+    },
+  "relations": {
+
+  }
+}
