@@ -8,6 +8,7 @@ use Core\Mail\Models\Mail as Model;
 use Core\Mail\Resources\MailResource as Resource;
 use Core\Mail\Trait\AttachmentTrait;
 use Illuminate\Http\Response;
+use  \Illuminate\Http\JsonResponse;
 
 class MailController extends \Core\Base\Controllers\API\Controller
 {
@@ -23,14 +24,14 @@ class MailController extends \Core\Base\Controllers\API\Controller
         parent::__construct($request, $model, $resource);
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
         $query = $this->model::filter($this->request);
 
         return  $this->sendResponse($this->resource::collection($query->get()));
     }
 
-    public function store()
+    public function store(): JsonResponse
     {
         $new_email = $this->model->create($this->request->all());
         $this->sendResponse(
