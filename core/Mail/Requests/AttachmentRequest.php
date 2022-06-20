@@ -30,7 +30,9 @@ class AttachmentRequest extends FormRequest
             }
             case 'POST': {
                 return [
-                    'filepath' => 'string|required',
+                    'filepath'            => 'string|required',
+                    'attachmentable_id'   => 'required',
+                    'attachmentable_type' => 'required'
 
                 ];
             }

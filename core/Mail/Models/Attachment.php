@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Storage;
 
 class Attachment extends Base
 {
+    protected $fillable = [
+      'attachmentable_id',
+      'attachmentable_type',
+      'filepath'
+    ];
+
     protected $appends = [
         'filename',
         'filesize',
