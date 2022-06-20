@@ -22,6 +22,7 @@ class MailResource extends Resource
             'html' => $this->html,
             'status' => $this->status,
             'subject' => $this->subject,
+            'attachments' => $this->attachments,
             $this->mergeWhen($request->route()->getName() == 'api.v1.mails.show', [
 
             ])
