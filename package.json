@@ -13,6 +13,12 @@
         "axios": "^0.25",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
-        "postcss": "^8.1.14"
+        "postcss": "^8.1.14",
+        "laravel-mix": "^6.0.6",
+        "axios": "^0.25",
+        "lodash": "^4.17.19",
+        "postcss": "^8.1.14",
+        "vue": "^3.2.33",
+        "vue-loader": "^16.8.3"
     }
 }
