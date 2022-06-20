@@ -44,6 +44,12 @@ class MailController extends \Core\Base\Controllers\API\Controller
             $email_attachments = $this->getAttachmentsPaths($this->request->file('attachments'), 'mail', $new_email->id);
             $this->saveAttachments($email_attachments);
         }
+
+        SendEmail::dispatch($new_email);
+
+        return response()->json([
+            'message' => 'Email will sent soon..'
+        ], Response::HTTP_ACCEPTED);
     }
 
     public function download()
