@@ -35,7 +35,7 @@ class MailRequest extends FormRequest
                     'text' => 'nullable',
                     'html' => 'nullable',
                     'status' => 'required',
-                    'subject' => 'required'
+                    'subject' => 'required|in:posted,failed,sent'
                 ];
             }
             case 'PUT': {
