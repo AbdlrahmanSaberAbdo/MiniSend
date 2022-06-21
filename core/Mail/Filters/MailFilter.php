@@ -7,6 +7,6 @@ use Core\Base\Filters\AbstractFilter;
 class MailFilter extends AbstractFilter
 {
     protected $filters = [
-        'mail_query' => MailQueryFilter::class
+        'mail_search_query' => MailQueryFilter::class
     ];
 }
