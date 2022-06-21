@@ -3,12 +3,14 @@
 namespace Core\Mail\Controllers\API\V1;
 
 use Core\Mail\Jobs\sendEmail;
+use Core\Mail\Models\Attachment;
 use Core\Mail\Requests\MailRequest as FormRequest;
 use Core\Mail\Models\Mail as Model;
 use Core\Mail\Resources\MailResource as Resource;
 use Core\Mail\Trait\AttachmentTrait;
 use Illuminate\Http\Response;
 use  \Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class MailController extends \Core\Base\Controllers\API\Controller
 {
@@ -53,8 +55,10 @@ class MailController extends \Core\Base\Controllers\API\Controller
         ], Response::HTTP_ACCEPTED);
     }
 
-    public function download()
+    public function download(): \Symfony\Component\HttpFoundation\StreamedResponse
     {
+        $attachment = Attachment::findOrFail($this->request->get('attachment_id'));
 
+        return Storage::download($attachment->filepath);
     }
 }
