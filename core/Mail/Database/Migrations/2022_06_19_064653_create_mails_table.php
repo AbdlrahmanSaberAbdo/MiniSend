@@ -16,8 +16,8 @@ class CreateMailsTable extends Migration
         Schema::create('mails', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('sender');
+            $table->string('recipient');
             $table->string('subject');
-            $table->text('recipient');
             $table->longText('text')->nullable();
             $table->longText('html')->nullable();
             $table->longText('status')->default('posted');
