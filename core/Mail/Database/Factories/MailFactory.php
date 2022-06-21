@@ -21,13 +21,14 @@ class MailFactory extends Factory
      */
     public function definition()
     {
+        $statuses = ['posted', 'Sent', 'Failed'];
         return [
-            'sender' => $this->faker->text(100),
-            'recipient' => '',
-            'text' => '',
-            'html' => '',
-            'status' => '',
-            'subject' => ''
+            'sender'    => $this->faker->email(),
+            'recipient' => $this->faker->email(),
+            'text'      => $this->faker->text(200),
+            'html'      =>  $this->faker->text(200),
+            'status'    => $statuses[array_rand([0,1,2])],
+            'subject'   => $this->faker->title()
         ];
     }
 }

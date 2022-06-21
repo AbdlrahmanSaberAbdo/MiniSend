@@ -2,18 +2,19 @@
 
 namespace Database\Seeders;
 
+use Core\Mail\Models\Mail;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class MailSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-        $this->call(MailSeeder::class);
+        Mail::factory()->count(3)->create();
     }
 }
