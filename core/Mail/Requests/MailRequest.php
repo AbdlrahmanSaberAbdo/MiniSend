@@ -34,8 +34,9 @@ class MailRequest extends FormRequest
                     'recipient' => 'required',
                     'text' => 'nullable',
                     'html' => 'nullable',
-                    'status' => 'required',
-                    'subject' => 'required|in:posted,failed,sent'
+                    'status' => 'required|in:posted,failed,sent',
+                    'subject' => 'required',
+                    'attachments' => 'array'
                 ];
             }
             case 'PUT': {
@@ -46,7 +47,6 @@ class MailRequest extends FormRequest
                     'html' => 'nullable',
                     'status' => 'required',
                     'subject' => 'required'
-
                 ];
             }
         }
