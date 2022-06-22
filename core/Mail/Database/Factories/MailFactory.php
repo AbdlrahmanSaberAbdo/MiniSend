@@ -4,6 +4,7 @@ namespace Core\Mail\Database\Factories;
 
 use Core\Mail\Models\Mail as Model;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
 
 class MailFactory extends Factory
 {
@@ -21,14 +22,14 @@ class MailFactory extends Factory
      */
     public function definition()
     {
-        $statuses = ['posted', 'Sent', 'Failed'];
+        $statuses = ['posted', 'sent', 'failed'];
         return [
-            'sender'    => $this->faker->email(),
-            'recipient' => $this->faker->email(),
-            'text'      => $this->faker->text(200),
-            'html'      =>  $this->faker->text(200),
-            'status'    => $statuses[array_rand([0,1,2])],
-            'subject'   => $this->faker->title()
+            'sender'      => $this->faker->email(),
+            'recipient'   => $this->faker->email(),
+            'text'        => $this->faker->text(200),
+            'html'        =>  $this->faker->text(200),
+            'status'      => $statuses[array_rand([0,1,2])],
+            'subject'     => $this->faker->title()
         ];
     }
 }
