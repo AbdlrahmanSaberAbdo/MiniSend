@@ -33,15 +33,12 @@ class MailController extends \Core\Base\Controllers\API\Controller
         return  $this->sendResponse($this->resource::collection($query->get()));
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function store(): JsonResponse
     {
         $new_email = $this->model->create($this->request->all());
-        $this->sendResponse(
-            new $this->resource($new_email),
-            'successfully created.',
-            true,
-            201
-        );
 
         if($this->request->has('attachments')) {
             $email_attachments = $this->getAttachmentsPaths($this->request->file('attachments'), 'mail', $new_email->id);
@@ -50,9 +47,12 @@ class MailController extends \Core\Base\Controllers\API\Controller
 
         SendEmail::dispatch($new_email);
 
-        return response()->json([
-            'message' => 'Email will sent soon..'
-        ], Response::HTTP_ACCEPTED);
+       return $this->sendResponse(
+            new $this->resource($new_email),
+            'Email will sent soon..',
+            true,
+            201
+        );
     }
 
     public function download(): \Symfony\Component\HttpFoundation\StreamedResponse
