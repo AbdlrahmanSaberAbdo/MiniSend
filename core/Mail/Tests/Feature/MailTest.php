@@ -3,7 +3,10 @@
 namespace Core\Mail\Tests\Feature;
 
 use Core\Base\Tests\TestCase;
+use Core\Mail\Mail\GenerateEmail;
 use Core\Mail\Models\Mail as Model;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 
 class MailTest extends TestCase
 {
@@ -37,8 +40,8 @@ class MailTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->base_url     = $this->getApiBaseUrl() . 'mails/';
+        Mail::fake();
+        $this->base_url     = $this->getApiBaseUrl() . 'emails/';
         $this->data         = Model::factory()->make()->toArray();
         $this->json         = $this->getJsonStructure();
         $this->json['data'] = ['id'];
@@ -86,7 +89,7 @@ class MailTest extends TestCase
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in storage and test if he sent an email when receiving a valid payload
      *
      * @return void
      */
@@ -95,6 +98,17 @@ class MailTest extends TestCase
         $this->json('POST', $this->base_url, $this->data, $this->getHeaders())
              ->assertStatus(201)
              ->assertJsonStructure($this->json);
+
+        Mail::assertSent(GenerateEmail::class);
+    }
+
+    /**
+     * @test
+     * @param array $payload
+     */
+    public function testDoesNotSendAnEmailWhenWriteInvalidPayload($payload = []) {
+      $this->json('POST', $this->base_url, $payload, $this->getHeaders())->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+      Mail::assertNotSent(GenerateEmail::class);
     }
 
     /**
