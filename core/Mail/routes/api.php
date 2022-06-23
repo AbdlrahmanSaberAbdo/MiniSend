@@ -7,6 +7,6 @@ Route::group(['prefix' => 'api', 'middleware' => []], function () {
          Route::apiResource('emails', 'MailController');
         #*** END: Mail ***#
 
-        Route::get('/attachments/download', 'MailController@download');
+        Route::get('/attachments/download', 'AttachmentController@download');
     });
 });
