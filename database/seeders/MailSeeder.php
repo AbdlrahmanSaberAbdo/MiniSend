@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Core\Mail\Models\Mail;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class MailSeeder extends Seeder
