@@ -33,31 +33,40 @@ class Attachment extends Base
     /**
      * Returns the file size in with the appropriate size unit.
      *
-     * @return string
+     * @return string|null
      */
-    public function getFilesizeAttribute(): string
+    public function getFilesizeAttribute(): string|null
     {
-        $size = Storage::size($this->filepath);
-        $sizeUnit = '';
-        if ($size >= 524288) {
-            $size = number_format($size / 1048576, 2) . ' MB';
-        } elseif ($size >= 512) {
-            $size = number_format($size / 1024, 2) . ' KB';
-        } else {
-            $sizeUnit = ' bytes';
+        if(Storage::exists($this->filepath)) {
+            $size = Storage::size($this->filepath);
+            $sizeUnit = '';
+            if ($size >= 524288) {
+                $size = number_format($size / 1048576, 2) . ' MB';
+            } elseif ($size >= 512) {
+                $size = number_format($size / 1024, 2) . ' KB';
+            } else {
+                $sizeUnit = ' bytes';
+            }
+
+            return $size . $sizeUnit;
         }
 
-        return $size . $sizeUnit;
+        return null;
     }
 
     /**
      * Returns the file media type.
      *
-     * @return string
+     * @return string|null
      */
-    public function getMediaTypeAttribute(): string
+    public function getMediaTypeAttribute(): string|null
     {
-        return mime_content_type(Storage::path($this->filepath));
+        if (Storage::exists($this->filepath)) {
+
+            return mime_content_type(Storage::path($this->filepath));
+        }
+
+        return null;
     }
 
     /**
