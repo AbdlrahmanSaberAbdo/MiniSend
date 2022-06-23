@@ -3,13 +3,19 @@
 namespace Core\Mail\Tests\Feature;
 
 use Core\Base\Tests\TestCase;
+use Core\Mail\Jobs\sendEmail;
 use Core\Mail\Mail\GenerateEmail;
 use Core\Mail\Models\Mail as Model;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Queue;
 
 class MailTest extends TestCase
 {
+    use WithFaker, RefreshDatabase;
     /**
      * the base url
      *
@@ -112,6 +118,80 @@ class MailTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    public function testItStoreTheEmailAndAttachmentsInTheDatabase()
+    {
+        $payload = [
+            'sender' => $this->faker->email,
+            'recipient' => $this->faker->email,
+            'subject' => $this->faker->title(),
+            'text' => $this->faker->text,
+            'status' => 'posted',
+            'html' => '<p>test</p>', // TODO: add faker
+            'attachments' => [
+                UploadedFile::fake()->create('email.pdf', 100)
+            ]
+        ];
+
+        $this->json('POST', $this->base_url, $payload, $this->getHeaders())->assertStatus(Response::HTTP_CREATED);
+
+        $email = \Core\Mail\Models\Mail::with('attachments')->first();
+
+        $this->assertNotNull($email);
+        $this->assertNotNull($email->attachments);
+
+        $this->assertEquals($payload['sender'], $email->sender);
+        $this->assertEquals($payload['recipient'], $email->recipient);
+        $this->assertEquals($payload['subject'], $email->subject);
+        $this->assertEquals($payload['text'], $email->text);
+        $this->assertEquals($payload['subject'], $email->subject);
+        $this->assertEquals($payload['text'], $email->text);
+        $this->assertEquals($payload['html'], $email->html);
+        $this->assertEquals($payload['status'], $email->status);
+        $this->assertEquals(
+            'public/files/' . $payload['attachments'][0]->getClientOriginalName(),
+            $email->attachments->first()->filepath
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function testItEnqueuesAJobToSendAnEmailWhenRecivingAValidPayload()
+    {
+        Queue::fake();
+
+        $payload = [
+            'sender' => $this->faker->email,
+            'recipient' => $this->faker->email,
+            'subject' => $this->faker->words(3, true),
+            'status'    => 'posted',
+            'text' => $this->faker->text,
+            'html' => $this->faker->randomHtml(1, 1),
+            'attachments' => [
+                UploadedFile::fake()->create('email.txt', 100)
+            ]
+        ];
+
+        $this->json('POST', $this->base_url, $payload, $this->getHeaders());
+
+        Queue::assertPushed(SendEmail::class);
+    }
+
+    /**
+     * @test
+     */
+    public function testItDoesNotEnqueuesAJobToSendAnEmailWhenRecivingANotValidPayload($payload = [])
+    {
+        Queue::fake();
+
+        $this->json('POST', $this->base_url, $payload, $this->getHeaders());
+
+        Queue::assertNotPushed(SendEmail::class);
+    }
+
+    /**
      * Display the specified resource.
      *
      * @return void
@@ -122,6 +202,7 @@ class MailTest extends TestCase
              ->assertStatus(200)
              ->assertJsonStructure($this->json);
     }
+
 
     /**
      * update a resource in storage.
