@@ -22,8 +22,7 @@ class AttachmentFactory extends Factory
     public function definition()
     {
         return [
-            'filepath' => $this->faker->text(100),
-
+            'filepath' => 'public/files/' . $this->faker->word . '.txt',
         ];
     }
 }
