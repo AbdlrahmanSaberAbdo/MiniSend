@@ -3,10 +3,17 @@
 namespace Core\Mail\Tests\Feature;
 
 use Core\Base\Tests\TestCase;
-use Core\Mail\Models\Attachment as Model;
+use Core\Mail\Models\Attachment;
+use Core\Mail\Models\Mail;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class AttachmentTest extends TestCase
 {
+    use RefreshDatabase, WithFaker;
+
     /**
      * the base url
      *
@@ -39,7 +46,7 @@ class AttachmentTest extends TestCase
         parent::setUp();
 
         $this->base_url     = $this->getApiBaseUrl() . 'attachments/';
-        $this->data         = Model::factory()->make()->toArray();
+        $this->data         = Attachment::factory()->make()->toArray();
         $this->json         = $this->getJsonStructure();
         $this->json['data'] = ['id'];
 
@@ -49,88 +56,24 @@ class AttachmentTest extends TestCase
     }
 
     /**
-     * create new entry
-     *
-     * @return Model
+     * @test
      */
-    protected function getNewEntry()
+    public function testDownLoadAttachments()
     {
-        return Model::factory()->create();
-    }
+        Storage::fake();
 
-    /**
-     * get the id
-     *
-     * @return int
-     */
-    protected function getId()
-    {
-        return $this->getNewEntry()->id;
-    }
+        $email = Mail::factory()->create();
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return void
-     */
-    public function testItShouldGetListingOfTheResource()
-    {
-        $this->getNewEntry();
-        $json              = $this->json;
-        $json['data']      = [];
-        $json['data']['*'] = $this->json['data'];
+       $attachment = Attachment::factory()->create([
+           'attachmentable_id' => $email->id,
+           'attachmentable_type' => 'mail'
+       ]);
 
-        $this->json('GET', $this->base_url, [], $this->getHeaders())
-             ->assertStatus(200)
-             ->assertJsonStructure($json);
-    }
+        $attachment = $email->attachments->first();
+        Storage::put($attachment->filepath, $attachment->filename);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return void
-     */
-    public function testItShouldStoreNewlyCreatedResource()
-    {
-        $this->json('POST', $this->base_url, $this->data, $this->getHeaders())
-             ->assertStatus(201)
-             ->assertJsonStructure($this->json);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @return void
-     */
-    public function testItShouldGetSpecifiedResource()
-    {
-        $this->json('GET', $this->base_url . $this->getId(), [], $this->getHeaders())
-             ->assertStatus(200)
-             ->assertJsonStructure($this->json);
-    }
-
-    /**
-     * update a resource in storage.
-     *
-     * @return void
-     */
-    public function testItShouldUpdateSpecifiedResource()
-    {
-        $this->json('PUT', $this->base_url . $this->getId(), $this->data, $this->getHeaders())
-             ->assertStatus(200)
-             ->assertJsonStructure($this->json);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return void
-     */
-    public function testItShouldRemoveSpecifiedResource()
-    {
-        $this->json['data'] = [];
-        $this->json('DELETE', $this->base_url . $this->getId(), [], $this->getHeaders())
-             ->assertStatus(200)
-             ->assertJsonStructure($this->json);
+        $this->json('GET', $this->base_url.'download?attachment_id='.$attachment->id, [], $this->getHeaders())
+            ->assertStatus(Response::HTTP_OK)
+            ->assertHeader('content-disposition', 'attachment; filename=' . $attachment->filename);
     }
 }
