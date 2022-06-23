@@ -47,5 +47,5 @@ The app contains two parts (frontend - backend) with different features
     - download(GET): http://localhost:8000/api/v1/attachments/download?attachments_id=...
 
 # Notes
-- I used my package `Laragine` so the application structure follow `HMVC` pattern so to be able to see the `Mail` module you should go to 
+- I used my package [Laragine](https://github.com/yepwoo/laragine) so the application structure follow `HMVC` pattern so to be able to see the `Mail` module you should go to 
 this path `core/Mail`
