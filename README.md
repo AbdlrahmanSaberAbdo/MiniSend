@@ -33,9 +33,10 @@ The app contains two parts (frontend - backend) with different features
   - MAILGUN_DOMAIN=
     
 - RUN `compoer update`
+- RUN `php artisan key:generate`
 - RUN `php artisan migrate`
 - RUN `yarn && yarn dev` or `npm install && npm run dev`
-- RUN `php artisan serve`
+- RUN `php artisan serve`, go to the main page by visiting `http://localhost:8000/`
 - You can run the tests by running `./vendor/bin/phpunit` 
 - enjoy :)
 
