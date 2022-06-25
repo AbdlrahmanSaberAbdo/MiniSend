@@ -33,9 +33,10 @@ The app contains two parts (frontend - backend) with different features
   - MAILGUN_DOMAIN=
     
 - RUN `compoer update`
+- RUN `php artisan key:generate`
 - RUN `php artisan migrate`
 - RUN `yarn && yarn dev` or `npm install && npm run dev`
-- RUN `php artisan serve`
+- RUN `php artisan serve`, go to the main page by visiting `http://localhost:8000/`
 - You can run the tests by running `./vendor/bin/phpunit` 
 - enjoy :)
 
@@ -49,3 +50,5 @@ The app contains two parts (frontend - backend) with different features
 # Notes
 - I used my package [Laragine](https://github.com/yepwoo/laragine) so the application structure follow `HMVC` pattern so to be able to see the `Mail` module you should go to 
 this path `core/Mail`
+
+If you woul'd like to know more about **HMVC** pattern check my article on medium, here's the [link](https://abdlrahmansaber.medium.com/how-organize-big-projects-in-laravel-900a3749cfde)
