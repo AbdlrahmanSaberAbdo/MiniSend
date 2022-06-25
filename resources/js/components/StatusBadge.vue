@@ -10,15 +10,15 @@
 
         computed: {
             statusClass() {
-                if (this.status === 'Sent') {
+                if (this.status === 'sent') {
                     return 'text-green-900 bg-green-200';
                 }
 
-                if (this.status === 'Posted') {
+                if (this.status === 'posted') {
                     return 'text-yellow-900 bg-yellow-200';
                 }
 
-                if (this.status === 'Failed') {
+                if (this.status === 'failed') {
                     return 'text-red-900 bg-red-200';
                 }
 
