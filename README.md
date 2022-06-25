@@ -10,8 +10,8 @@ The app contains two parts (frontend - backend) with different features
 - **Frontend**
     - VueJs
     - Tailwind
-    - Get measurements
-    - Filtering (day / hour)
+    - Filtering (From / to / subject)
+
 
 # Trade-offs
 - Dockrize the frontend & backend
